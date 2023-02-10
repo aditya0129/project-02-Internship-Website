@@ -1,5 +1,5 @@
+const collegemodel = require("../models/collegemodel")
 const CollegeModel=require("../models/collegemodel")
-const mongoose=require("mongoose")
 const InternModel=require("../models/InternModel")
 const {validName,validFullName,isValidLink}= require("../validator/validation")
 
@@ -11,9 +11,11 @@ const createcollege=async function(req,res){
         if(!data) return res.status(400).send({status:false,msg:"Invalid request"})
      const {name,fullName,logoLink}=data
      if(!name) return res.status(400).send({status:false,msg:"Name is required"})
-     if(!validName(name.trim())) return res.status(400).send({status:false,msg:"Enter valid name"});
+     if(!validName(name)) return res.status(400).send({status:false,msg:"Enter valid name"});
+     const collegeByName = await CollegeModel.findOne({name:name})
+     if(collegeByName) return res.status(400).send({status:false,msg:"Name should be unique"})
      if(!fullName) return res.status(400).send({status:false,msg:"fullName is required"})
-    if(!validFullName(fullName.trim())) return res.status(400).send({status:false,msg:"Enter valid fullName"})
+    if(!validFullName(fullName)) return res.status(400).send({status:false,msg:"Enter valid fullName"})
     if(!logoLink) return res.status(400).send({status:false,msg:"Link is required"})
     if(!isValidLink(logoLink)) return res.status(400).send({status:false,msg:"Enter a valid link"})
     
@@ -40,7 +42,7 @@ const getCollege = async function (req, res) {
         
         if (interns.length == 0) return res.status(400).send({status: false, msg: 'no intern found in this college'});
 
-        const {name, fullName, logoLink} = college;
+        const {name, fullName, logoLink} = college;``
         const result = {name , fullName, logoLink, interns};
         res.status(200).send({status: true, data: result})
     } catch (error) {
@@ -51,5 +53,54 @@ const getCollege = async function (req, res) {
 
 
 
+
+
 module.exports.getCollege=getCollege
 module.exports.createcollege=createcollege
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const getcollege= async function(req,res){
+    let data=req.body
+    let {name,fullname,id}=data
+    if(!data) return res.status(400).send({msg:"data must be required"})
+    let finddata=await collegemodel.find(data)
+    
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
